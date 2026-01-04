@@ -371,8 +371,7 @@ void BNO080Sensor::sendData() {
 
 void BNO080Sensor::sendTempIfNeeded() {
 	uint32_t now = micros();
-	constexpr float maxSendRateHz = 2.0f;
-	constexpr uint32_t sendInterval = 1.0f / maxSendRateHz * 1e6;
+	constexpr uint32_t sendInterval = TEMPERATURE_SEND_RATE_MS * 1000;
 	uint32_t elapsed = now - m_lastTemperaturePacketSent;
 	if (elapsed >= sendInterval) {
 		m_lastTemperaturePacketSent = now - (elapsed - sendInterval);

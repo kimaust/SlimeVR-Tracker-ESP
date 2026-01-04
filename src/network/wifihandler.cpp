@@ -66,6 +66,23 @@ void WiFiNetwork::setUp() {
 	wifiHandlerLogger.info("Setting up WiFi");
 	WiFi.persistent(true);
 	WiFi.mode(WIFI_STA);
+#if !ESP8266
+	// Restrict ESP32 STA to 802.11n only (drop 11b/11g).
+	// Note: some management/control frames may still use legacy rates.
+	esp_err_t protoRes = esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11N);
+	if (protoRes != ESP_OK) {
+		wifiHandlerLogger.error(
+			"Failed to set WiFi protocol to 11n only, err=%d",
+			static_cast<int>(protoRes)
+		);
+	} else {
+		wifiHandlerLogger.info("WiFi protocol restricted to 802.11n (no b/g)");
+	}
+
+	// Set ESP32 TX power for better range
+	WiFi.setTxPower(ESP32_WIFI_TX_POWER);
+	wifiHandlerLogger.info("WiFi TX power set to %d (x0.25 dBm)", ESP32_WIFI_TX_POWER);
+#endif
 	WiFi.hostname("SlimeVR FBT Tracker");
 	wifiHandlerLogger.info(
 		"Loaded credentials for SSID '%s' and pass length %d",
@@ -152,7 +169,7 @@ void WiFiNetwork::upkeep() {
 			return;
 		}
 
-		if (millis() - lastRssiSample >= 2000) {
+		if (millis() - lastRssiSample >= RSSI_REPORT_INTERVAL_MS) {
 			lastRssiSample = millis();
 			uint8_t signalStrength = WiFi.RSSI();
 			networkConnection.sendSignalStrength(signalStrength);

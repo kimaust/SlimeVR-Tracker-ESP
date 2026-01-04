@@ -147,7 +147,9 @@ void setup() {
 	sensorManager.setup();
 
 	networkManager.setup();
+#if ENABLE_OTA
 	OTA::otaSetup(otaPassword);
+#endif
 	battery.Setup();
 
 	statusManager.setStatus(SlimeVR::Status::LOADING, false);
@@ -162,7 +164,9 @@ void loop() {
 	tpsCounter.update();
 	globalTimer.tick();
 	SerialCommands::update();
+#if ENABLE_OTA
 	OTA::otaUpdate();
+#endif
 	networkManager.update();
 
 #if DEBUG_MEASURE_SENSOR_TIME_TAKEN

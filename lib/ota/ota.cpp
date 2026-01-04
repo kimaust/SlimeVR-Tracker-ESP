@@ -27,6 +27,11 @@ const unsigned long bootTime = millis();
 bool enabled = true;
 
 void OTA::otaSetup(const char * const otaPassword) {
+	#if !ENABLE_OTA
+	enabled = false;
+	return;
+	#endif
+
     if(otaPassword[0] == '\0') {
         enabled = false;
         return; // No password set up, disable OTA
@@ -63,6 +68,10 @@ void OTA::otaSetup(const char * const otaPassword) {
 }
 
 void OTA::otaUpdate() {
+	#if !ENABLE_OTA
+	return;
+	#endif
+
     if(enabled) {
         #if USE_OTA_TIMEOUT
         if(bootTime + 60000 < millis()) {

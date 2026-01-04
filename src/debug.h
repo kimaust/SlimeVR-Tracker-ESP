@@ -41,7 +41,9 @@
 
 // Debug information
 
-#define LOG_LEVEL LOG_LEVEL_DEBUG
+// #define LOG_LEVEL LOG_LEVEL_DEBUG
+#define LOG_LEVEL LOG_LEVEL_WARN
+// #define PRINT_STATE_EVERY_MS 60000
 
 #if LOG_LEVEL == LOG_LEVEL_TRACE
 #define DEBUG_SENSOR
@@ -52,19 +54,25 @@
 #define serialDebug false  // Set to true to get Serial output for debugging
 #define serialBaudRate 115200
 #define LED_INTERVAL_STANDBY 10000
-#define PRINT_STATE_EVERY_MS 60000
 
 // Determines how often we sample and send data
 #define samplingRateInMillis 10
 
+// Sensor data send rate in ms (how often rotation/acceleration data is sent)
+// 10ms = 100Hz, 5ms = 200Hz, 20ms = 50Hz
+#define SENSOR_DATA_SEND_RATE_MS 11.3
+
 // Sleeping options
-#define POWERSAVING_MODE POWER_SAVING_LEGACY  // Minimum causes sporadic data pauses
+#define POWERSAVING_MODE POWER_SAVING_NONE  // Minimum causes sporadic data pauses
 #if POWERSAVING_MODE >= POWER_SAVING_MINIMUM
 #define TARGET_LOOPTIME_MICROS (samplingRateInMillis * 1000)
 #endif
 
+// Must be > 1000us to be valid for now.
+#define TARGET_LOOPTIME_MICROS (2000)
+
 // Packet bundling/aggregation
-#define PACKET_BUNDLING PACKET_BUNDLING_BUFFERED
+#define PACKET_BUNDLING PACKET_BUNDLING_LOWLATENCY
 // Extra tunable for PACKET_BUNDLING_BUFFERED (10000us = 10ms timeout, 100hz target)
 #define PACKET_BUNDLING_BUFFER_SIZE_MICROS 10000
 
@@ -72,7 +80,13 @@
 #define useFullCalibrationMatrix true
 
 // Battery configuration
-#define batterySampleRate 10000
+#define batterySampleRate 20000
+
+// RSSI signal strength reporting interval in ms
+#define RSSI_REPORT_INTERVAL_MS 21000
+
+// Temperature send rate in ms (how often temperature is sent to the server)
+#define TEMPERATURE_SEND_RATE_MS 19000
 #define BATTERY_LOW_VOLTAGE_DEEP_SLEEP false
 #define BATTERY_LOW_POWER_VOLTAGE 3.3f  // Voltage to raise error
 
@@ -89,6 +103,13 @@
 #define ATTENUATION_N 10.0 / 4.0
 #define ATTENUATION_G 14.0 / 4.0
 #define ATTENUATION_B 40.0 / 4.0
+
+// ESP32 WiFi TX Power - set to maximum for best range
+// Options: WIFI_POWER_19_5dBm, WIFI_POWER_19dBm, WIFI_POWER_18_5dBm,
+//          WIFI_POWER_17dBm, WIFI_POWER_15dBm, WIFI_POWER_13dBm,
+//          WIFI_POWER_11dBm, WIFI_POWER_8_5dBm, WIFI_POWER_7dBm,
+//          WIFI_POWER_5dBm, WIFI_POWER_2dBm, WIFI_POWER_MINUS_1dBm
+#define ESP32_WIFI_TX_POWER WIFI_POWER_11dBm
 
 // Send inspection packets over the network to a profiler
 // Not recommended for production
@@ -118,9 +139,15 @@
 #define DEBUG_MEASURE_SENSOR_TIME_TAKEN false
 #endif
 
+#ifndef ENABLE_OTA
+// Set to 0 to compile out OTA setup/handling calls (recommended for low-power builds)
+#define ENABLE_OTA 0
+#endif
+
 #ifndef USE_OTA_TIMEOUT
 #define USE_OTA_TIMEOUT false
 #endif
+
 
 #define ON_OFF_BUTTON_PIN 1
 #define BUTTON_IMU_ENABLE_PIN 10

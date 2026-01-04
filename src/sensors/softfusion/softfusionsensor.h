@@ -91,8 +91,7 @@ class SoftFusionSensor : public Sensor {
 
 	void sendTempIfNeeded() {
 		uint32_t now = micros();
-		constexpr float maxSendRateHz = 2.0f;
-		constexpr uint32_t sendInterval = 1.0f / maxSendRateHz * 1e6;
+		constexpr uint32_t sendInterval = TEMPERATURE_SEND_RATE_MS * 1000;
 		uint32_t elapsed = now - m_lastTemperaturePacketSent;
 		if (elapsed >= sendInterval) {
 			m_lastTemperaturePacketSent = now - (elapsed - sendInterval);
@@ -237,8 +236,7 @@ public:
 
 		// send new fusion values when time is up
 		now = micros();
-		constexpr float maxSendRateHz = 100.0f;
-		constexpr uint32_t sendInterval = 1.0f / maxSendRateHz * 1e6f;
+		constexpr uint32_t sendInterval = SENSOR_DATA_SEND_RATE_MS * 1000;
 		elapsed = now - m_lastRotationPacketSent;
 		if (elapsed >= sendInterval) {
 			auto overwhelmed = m_sensor.bulkRead({
