@@ -60,7 +60,8 @@
 
 // Sensor data send rate in ms (how often rotation/acceleration data is sent)
 // 10ms = 100Hz, 5ms = 200Hz, 20ms = 50Hz
-#define SENSOR_DATA_SEND_RATE_MS 11.3
+// #define SENSOR_DATA_SEND_RATE_MS 11.3
+#define SENSOR_DATA_SEND_RATE_MS 10
 
 // Sleeping options
 #define POWERSAVING_MODE POWER_SAVING_NONE  // Minimum causes sporadic data pauses
@@ -69,7 +70,7 @@
 #endif
 
 // Must be > 1000us to be valid for now.
-#define TARGET_LOOPTIME_MICROS (2000)
+// #define TARGET_LOOPTIME_MICROS (2000)
 
 // Packet bundling/aggregation
 #define PACKET_BUNDLING PACKET_BUNDLING_LOWLATENCY
@@ -109,7 +110,7 @@
 //          WIFI_POWER_17dBm, WIFI_POWER_15dBm, WIFI_POWER_13dBm,
 //          WIFI_POWER_11dBm, WIFI_POWER_8_5dBm, WIFI_POWER_7dBm,
 //          WIFI_POWER_5dBm, WIFI_POWER_2dBm, WIFI_POWER_MINUS_1dBm
-#define ESP32_WIFI_TX_POWER WIFI_POWER_11dBm
+#define ESP32_WIFI_TX_POWER WIFI_POWER_19_5dBm
 
 // Send inspection packets over the network to a profiler
 // Not recommended for production
