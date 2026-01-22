@@ -40,9 +40,14 @@ namespace SlimeVR::Sensors::SoftFusion::Drivers {
 struct ICM45Base {
 	static constexpr uint8_t Address = 0x68;
 
-	static constexpr float GyrTs = 1.0 / 204.8;
-	static constexpr float AccTs = 1.0 / 102.4;
+	// static constexpr float GyrTs = 1.0 / 204.8;
+	// static constexpr float AccTs = 1.0 / 102.4;
+	static constexpr float GyrTs = 1.0 / 409.6;
+	static constexpr float AccTs = 1.0 / 204.8;
 	static constexpr float TempTs = 1.0 / 409.6;
+	// static constexpr float GyrTs = 1.0 / 200.0;
+	// static constexpr float AccTs = 1.0 / 100.0;
+	// static constexpr float TempTs = 1.0 / 200.0;
 
 	static constexpr float MagTs = 1.0 / 100;
 
@@ -71,13 +76,15 @@ struct ICM45Base {
 		struct GyroConfig {
 			static constexpr uint8_t reg = 0x1c;
 			static constexpr uint8_t value
-				= (0b0000 << 4) | 0b1000;  // 4000dps, odr=204.8Hz
+				= (0b0000 << 4) | 0b0111;  // 4000dps, odr=409.6Hz
+				// = (0b0000 << 4) | 0b1000;  // 4000dps, odr=204.8Hz
 		};
 
 		struct AccelConfig {
 			static constexpr uint8_t reg = 0x1b;
 			static constexpr uint8_t value
-				= (0b000 << 4) | 0b1001;  // 32g, odr = 102.4Hz
+				= (0b000 << 4) | 0b1000;  // 32g, odr = 204.8Hz
+				// = (0b000 << 4) | 0b1001;  // 32g, odr = 102.4Hz
 		};
 
 		struct FifoConfig0 {

@@ -41,8 +41,8 @@
 
 // Debug information
 
-// #define LOG_LEVEL LOG_LEVEL_DEBUG
-#define LOG_LEVEL LOG_LEVEL_WARN
+#define LOG_LEVEL LOG_LEVEL_DEBUG
+// #define LOG_LEVEL LOG_LEVEL_WARN
 // #define PRINT_STATE_EVERY_MS 60000
 
 #if LOG_LEVEL == LOG_LEVEL_TRACE
@@ -51,7 +51,7 @@
 #define DEBUG_CONFIGURATION
 #endif
 
-#define serialDebug false  // Set to true to get Serial output for debugging
+#define serialDebug true  // Set to true to get Serial output for debugging
 #define serialBaudRate 115200
 #define LED_INTERVAL_STANDBY 10000
 
